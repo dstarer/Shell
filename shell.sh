@@ -1,4 +1,3 @@
-sudo su
 sudo apt-get update 
 sudo apt-get install apt-transport-https ca-certificates -y
 sudo apt-get install git -y
