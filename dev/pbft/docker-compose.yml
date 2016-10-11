@@ -1,1 +1,116 @@
+membersrvc:
+  image: hyperledger/fabric-membersrvc
+  restart: unless-stopped
+  ports:
+    - "7054:7054"
+  volumes: # docker.sock is mapped as the default CORE_VM_ENDPOINT
+    - /var/run/docker.sock:/var/run/docker.sock
+  command: membersrvc
+vp0:
+  hostname: vp0
+  restart: unless-stopped
+  environment:
+    - CORE_PEER_ID=vp0
+    - CORE_SECURITY_ENROLLID=test_vp0
+    - CORE_SECURITY_ENROLLSECRET=MwYpmSRjupbT
+    - CORE_SECURITY_ENABLED=true
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+    - CORE_PEER_ADDRESSAUTODETECT=true
+    - CORE_PEER_NETWORKID=dev
+    - CORE_LOGGING_LEVEL=info  #critical, error, warning, notice, info, debug
+    # The following section enables pbft consensus
+    - CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN=pbft  # noops, pbft
+    - CORE_PBFT_GENERAL_MODE=batch  # batch. classic and sieve will be not supported again.
+    - CORE_PBFT_GENERAL_N=4
+    - CORE_PBFT_GENERAL_BATCHSIZE=2  # only useful when in batch mode
+    - CORE_PBFT_GENERAL_TIMEOUT_REQUEST=2s
+  expose:
+    - "7051"
+    - "7052"
+    - "7053"
+  links:
+    - membersrvc
+  command: sh -c "sleep 5; peer node start"
+  
+vp1:
+  hostname: vp1
+  restart: unless-stopped
+  environment:
+    - CORE_PEER_ID=vp1
+    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+    - CORE_SECURITY_ENROLLID=test_vp1
+    - CORE_SECURITY_ENROLLSECRET=5wgHK9qqYaPy
+    - CORE_SECURITY_ENABLED=true
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+    - CORE_PEER_ADDRESSAUTODETECT=true
+    - CORE_PEER_NETWORKID=dev
+    - CORE_LOGGING_LEVEL=info  #critical, error, warning, notice, info, debug
+    # The following section enables pbft consensus
+    - CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN=pbft  # noops, pbft
+    - CORE_PBFT_GENERAL_MODE=batch  # batch. classic and sieve will be not supported again.
+    - CORE_PBFT_GENERAL_N=4
+    - CORE_PBFT_GENERAL_BATCHSIZE=2  # only useful when in batch mode
+    - CORE_PBFT_GENERAL_TIMEOUT_REQUEST=2s
+  links:
+    - membersrvc
+    - vp0
+  command: sh -c "sleep 5; peer node start"
 
+vp2:
+  hostname: vp2
+  restart: unless-stopped
+  environment:
+    - CORE_PEER_ID=vp2
+    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+    - CORE_SECURITY_ENROLLID=test_vp2
+    - CORE_SECURITY_ENROLLSECRET=vQelbRvja7cJ
+    - CORE_SECURITY_ENABLED=true
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+    - CORE_PEER_ADDRESSAUTODETECT=true
+    - CORE_PEER_NETWORKID=dev
+    - CORE_LOGGING_LEVEL=info  #critical, error, warning, notice, info, debug
+    # The following section enables pbft consensus
+    - CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN=pbft  # noops, pbft
+    - CORE_PBFT_GENERAL_MODE=batch  # batch. classic and sieve will be not supported again.
+    - CORE_PBFT_GENERAL_N=4
+    - CORE_PBFT_GENERAL_BATCHSIZE=2  # only useful when in batch mode
+    - CORE_PBFT_GENERAL_TIMEOUT_REQUEST=2s
+  links:
+    - membersrvc
+    - vp0
+  command: sh -c "sleep 5; peer node start"
+
+# vp3 will be used for client interactive operations
+# If you want to run fabric command on the host, then map 7051:7051 to host
+# port, or use like `CORE_PEER_ADDRESS=172.17.0.2:7051` to specify peer addr.
+vp3:
+  hostname: vp3
+  restart: unless-stopped
+  environment:
+    - CORE_PEER_ID=vp3
+    - CORE_PEER_DISCOVERY_ROOTNODE=vp0:7051
+    - CORE_SECURITY_ENROLLID=test_vp3
+    - CORE_SECURITY_ENROLLSECRET=9LKqKH5peurL
+    - CORE_SECURITY_ENABLED=true
+    - CORE_PEER_PKI_ECA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TCA_PADDR=membersrvc:7054
+    - CORE_PEER_PKI_TLSCA_PADDR=membersrvc:7054
+    - CORE_PEER_ADDRESSAUTODETECT=true
+    - CORE_PEER_NETWORKID=dev
+    - CORE_LOGGING_LEVEL=info  #critical, error, warning, notice, info, debug
+    # The following section enables pbft consensus
+    - CORE_PEER_VALIDATOR_CONSENSUS_PLUGIN=pbft  # noops, pbft
+    - CORE_PBFT_GENERAL_MODE=batch  # batch. classic and sieve will be not supported again.
+    - CORE_PBFT_GENERAL_N=4
+    - CORE_PBFT_GENERAL_BATCHSIZE=2  # only useful when in batch mode
+    - CORE_PBFT_GENERAL_TIMEOUT_REQUEST=2s
+  links:
+    - membersrvc
+    - vp0
+  command: sh -c "sleep 5; peer node start"
