@@ -29,16 +29,3 @@ curl -O https://storage.googleapis.com/golang/go1.7.1.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.7.1.linux-amd64.tar.gz
 mkdir -p ~/go; echo "export GOPATH=$HOME/go" >> ~/.bashrc
 echo "export PATH=$PATH:$HOME/go/bin:/usr/local/go/bin" >> ~/.bashrc
-source ~/.bashrc
-
-
-mkdir -p $GOPATH/src/github.com/chaincode_example02/
-cd $GOPATH/src/github.com/chaincode_example02
-curl GET https://raw.githubusercontent.com/hyperledger/fabric/master/examples/chaincode/go/chaincode_example02/chaincode_example02.go > chaincode_example02.go
-
-mkdir -p $GOPATH/src/github.com/hyperledger
-cd $GOPATH/src/github.com/hyperledger
-git clone http://gerrit.hyperledger.org/r/fabric
-
-cd $GOPATH/src/github.com/chaincode_example02
-go build
