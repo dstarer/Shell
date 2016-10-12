@@ -23,7 +23,7 @@ chmod +x /usr/local/bin/docker-compose
 
 docker pull hyperledger/fabric-peer:latest
 docker pull hyperledger/fabric-membersrvc:latest
-docker pull hyperledger/fabric-baseimage:latest
+docker tag hyperledger/fabric-peer:latest hyperledger/fabric-baseimage:latest
 
 curl -O https://storage.googleapis.com/golang/go1.7.1.linux-amd64.tar.gz
 tar -C /usr/local -xzf go1.7.1.linux-amd64.tar.gz
