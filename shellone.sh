@@ -21,11 +21,12 @@ sudo docker run hello-world
 curl -L https://github.com/docker/compose/releases/download/1.8.1/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
-docker pull hyperledger/fabric-peer:latest
-docker pull hyperledger/fabric-membersrvc:latest
-docker tag hyperledger/fabric-peer:latest hyperledger/fabric-baseimage:latest
+docker pull yeasy/hyperledger-fabric:latest
+docker tag yeasy/hyperledger-fabric:latest hyperledger/fabric-peer:latest
+docker tag yeasy/hyperledger-fabric:latest hyperledger/fabric-baseimage:latest
+docker tag yeasy/hyperledger-fabric:latest hyperledger/fabric-membersrvc:latest
 
 curl -O https://storage.googleapis.com/golang/go1.7.1.linux-amd64.tar.gz
-tar -C /usr/local -xzf go1.7.1.linux-amd64.tar.gz
-mkdir -p ~/go; echo "export GOPATH=$HOME/go" >> ~/.bashrc
+sudo tar -C /usr/local -xzf go1.7.1.linux-amd64.tar.gz
+sudo mkdir -p ~/go; echo "export GOPATH=$HOME/go" >> ~/.bashrc
 echo "export PATH=$PATH:$HOME/go/bin:/usr/local/go/bin" >> ~/.bashrc
